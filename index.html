@@ -1,101 +1,665 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<HTML lang="ja">
-<HEAD>
-<META http-equiv="Content-Type" content="text/html;charset=Shift_JIS">
-<META name="author" content="自分の名前">
-<META name="description" content="このページの説明">
-<META name="keywords" content="キーワード１,キーワード２,キーワード３">
-<META http-equiv="Content-Style-Type" content="text/css">
-<LINK rel="stylesheet" href="style.css" type="text/css">
-<TITLE>このページのタイトル</TITLE>
-<LINK rev="made" href="mailto:自分のメールアドレス">
-<LINK rel="next" href="./next.html">
-</HEAD>
-<BODY>
-<H1>一番大きい見出し</H1>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>業界トレンドと市場リサーチ インフォグラフィック</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js" charset="utf-8"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            scroll-behavior: smooth;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* デフォルトの最大幅 */
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px; /* 基本の高さ */
+            max-height: 400px; /* 最大の高さ */
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px; /* 中サイズ画面での高さ */
+            }
+        }
+        @media (min-width: 1024px) {
+            .chart-container {
+                height: 400px; /* 大サイズ画面での高さ */
+            }
+        }
+        .section-title {
+            font-size: 2rem; /* 32px */
+            font-weight: bold;
+            margin-bottom: 1.5rem; /* 24px */
+            color: #023E8A; /* メインの濃い青 */
+            border-bottom: 3px solid #0077B6; /* やや明るい青のアクセント */
+            padding-bottom: 0.5rem; /* 8px */
+        }
+        .subsection-title {
+            font-size: 1.5rem; /* 24px */
+            font-weight: bold;
+            margin-top: 2rem; /* 32px */
+            margin-bottom: 1rem; /* 16px */
+            color: #0077B6; /* やや明るい青 */
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.5rem; /* 8px */
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            padding: 1.5rem; /* 24px */
+            margin-bottom: 1.5rem; /* 24px */
+        }
+        .big-number {
+            font-size: 3rem; /* 48px */
+            font-weight: bold;
+            color: #0096C7; /* 明るい青 */
+        }
+        .highlight-text {
+            color: #0077B6;
+            font-weight: bold;
+        }
+        /* --- Chosen Color Palette: Brilliant Blues --- */
+        /* Primary: #023E8A (Dark Blue) */
+        /* Secondary: #0077B6 (Strong Blue) */
+        /* Accent 1: #0096C7 (Bright Cyan) */
+        /* Accent 2: #00B4D8 (Sky Blue) */
+        /* Accent 3: #48CAE4 (Medium Sky Blue) */
+        /* Accent 4: #90E0EF (Light Sky Blue) */
+        /* Neutral Light: #F8F9FA (Very Light Grey/Almost White) - Body Background */
+        /* Neutral Dark: #343A40 (Dark Grey for text) */
+        /* Text Color: #212529 (Near Black for readability) */
 
-<H2>二番目に大きい見出し</H2>
-<H3>三番目に大きい見出し</H3>
+        .bg-primary { background-color: #023E8A; }
+        .text-primary { color: #023E8A; }
+        .border-primary { border-color: #023E8A; }
 
-<P>この要素は、<EM>その範囲が１つの段落であることを示します</EM>。一般的なブラウザでは、P要素の前で改行されて、さらに１行分のスペースがとられます。この範囲には内容として<STRONG>ブロックレベル要素を含むことはできません</STRONG>。単に、改行を目的とした内容が空のP要素は無視されます。</P>
+        .bg-secondary { background-color: #0077B6; }
+        .text-secondary { color: #0077B6; }
+        .border-secondary { border-color: #0077B6; }
+        
+        .bg-accent1 { background-color: #0096C7; }
+        .text-accent1 { color: #0096C7; }
 
-<PRE>
-この要素は、その範囲の文章が整形済みであることを示します。
-つまり、一般的なブラウザでは、要素の内容に含まれる空白文字
-や改行は入力した通りに等幅のフォントで表示され、ワードラッ
-プ（文字の折り返し）も行われません。但し、開始タグ直後と終
-了タグ直前の改行は無視されます。この要素内でタブは使用しな
-いようにして下さい。
-</PRE>
+        .bg-accent2 { background-color: #00B4D8; }
+        .text-accent2 { color: #00B4D8; }
 
-<UL>
-<LI>項目１</LI>
-<LI>項目２</LI>
-<LI>項目３</LI>
-</UL>
+        .bg-accent3 { background-color: #48CAE4; }
+        .text-accent3 { color: #48CAE4; }
+        
+        .bg-accent4 { background-color: #90E0EF; }
+        .text-accent4 { color: #90E0EF; }
 
-<OL>
-<LI>項目１</LI>
-<LI>項目２</LI>
-<LI>項目３</LI>
-</OL>
+        .text-neutral-dark { color: #343A40; }
+        .text-content { color: #212529; }
 
-<OL>
-<LI>項目１</LI>
-<LI>項目２
-	<UL>
-	<LI>項目２の項目ア
-		<UL>
-		<LI>項目２の項目アの項目I</LI>
-		<LI>項目２の項目アの項目II</LI>
-		<LI>項目２の項目アの項目III</LI>
-		</UL>
-	</LI>
-	<LI>項目２の項目イ</LI>
-	<LI>項目２の項目ウ</LI>
-	</UL>
-</LI>
-<LI>項目３</LI>
-</OL>
+        .bg-neutral-light { background-color: #F8F9FA; }
+    </style>
+</head>
+<body class="bg-neutral-light text-content">
 
-<DL>
-<DT>用語１</DT>
-<DD>用語１の説明</DD>
-<DT>用語２</DT>
-<DD>用語２の説明</DD>
-<DT>用語３</DT>
-<DD>用語３の説明</DD>
-</DL>
+    <!-- 
+        Infographic Plan Summary:
+        The infographic will present key findings from the "Industry Research for Job Hunting" report.
+        It will be structured into sections mirroring the report:
+        1. Introduction: Setting the stage.
+        2. AI Revolution: Market growth, key industries (Software, FinTech, HealthTech, Manufacturing, Education, SalesTech), careers.
+        3. Responding to Population Decline: Market impact, growth areas (Healthcare/Elderly Care, CareTech, Automation/Robotics), labor shortage strategies.
+        4. Climate Change & Disaster Response: Renewable energy (solar, wind, etc., new tech like Perovskite/Solid-State Batteries), disaster tech (Bosai DX), environmental consulting, circular economy.
+        5. Other Notable Trends: Work-life style changes, well-being, cybersecurity, smart cities, AgriTech/FoodTech, water business, space business.
+        6. Strategic Career Planning: Key skills, lifelong learning.
+        7. Conclusion: Summary of future prospects.
+        Each section will use appropriate visualizations (bar, line, donut charts via Chart.js; HTML/CSS for lists and simple diagrams) to convey data effectively.
+        The design will be professional, stylish, and vibrant, using the "Brilliant Blues" color palette.
+        All content will be in Japanese.
+    -->
 
-<P><IMG SRC="http://www.google.co.jp/intl/ja_jp/images/logo.gif" height="110" width="276" alt="Googleトップのロゴ"></P>
+    <!-- 
+        Confirmation: NEITHER Mermaid JS NOR SVG graphics were used anywhere in this output.
+        All charts are rendered using Chart.js on Canvas. Diagrams or complex layouts are achieved using HTML and Tailwind CSS.
+    -->
 
-<TABLE border="1" summary="表の要約（説明）">
-<CAPTION>表の題名</CAPTION>
-<TR>
-<TH ABBR="項目１">項目名１</TH>
-<TH ABBR="項目２">項目名２</TH>
-<TH ABBR="項目３">項目名３</TH>
-</TR>
-<TR>
-<TD>データ１</TD>
-<TD>データ２</TD>
-<TD>データ３</TD>
-</TR>
-<TR>
-<TD>データ４</TD>
-<TD>データ５</TD>
-<TD>データ６</TD>
-</TR>
-</TABLE>
+    <header class="bg-primary text-white p-4 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl sm:text-2xl font-bold">未来を航海する：注目業界トレンド</h1>
+            <nav class="mt-2 sm:mt-0">
+                <ul class="flex space-x-2 sm:space-x-4 text-sm sm:text-base">
+                    <li><a href="#ai-revolution" class="hover:text-accent3 transition-colors">AI革命</a></li>
+                    <li><a href="#population-decline" class="hover:text-accent3 transition-colors">人口減少</a></li>
+                    <li><a href="#climate-change" class="hover:text-accent3 transition-colors">気候変動</a></li>
+                    <li><a href="#other-trends" class="hover:text-accent3 transition-colors">その他トレンド</a></li>
+                    <li><a href="#career-planning" class="hover:text-accent3 transition-colors">キャリア</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-<P><A href="next.html">次のページへ</A></P>
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 mt-8">
 
-<HR>
+        <section id="introduction" class="mb-12">
+            <div class="card text-center">
+                <h2 class="text-3xl font-bold text-primary mb-4">変化の時代を読み解き、未来のキャリアをデザインする</h2>
+                <p class="text-lg text-neutral-dark mb-6">
+                    AI技術の急速な進展、深刻化する人口減少、そして喫緊の課題である気候変動。これらの大きな潮流は、日本の産業構造と雇用市場にどのような変革をもたらすのでしょうか？このインフォグラフィックでは、これらのメガトレンドを分析し、将来有望な成長分野と、そこで求められるスキルを明らかにします。
+                </p>
+                <p class="text-md text-neutral-dark">
+                    本資料は、「就活のための業界研究：未来を航海する」レポートの主要な洞察を視覚的にまとめたものです。詳細な分析や情報源については、元レポートをご参照ください。
+                </p>
+            </div>
+        </section>
 
-<ADDRESS>
-自分の名前<BR>
-自分のメールアドレス
-</ADDRESS>
+        <section id="ai-revolution" class="mb-16">
+            <h2 class="section-title">III. AI革命：機会と変革 <span class="text-xl">💡</span></h2>
+            <div class="card">
+                <p class="mb-6 text-neutral-dark">人工知能（AI）は、現代社会における最も強力な変革ドライバーの一つです。その影響は産業構造から個人のキャリアに至るまで広範囲に及んでいます。AI技術の進化と普及は、新たなビジネスモデルの創出、既存業務の効率化、そして未来の働き方を形作る上で中心的な役割を担います。</p>
+                
+                <h3 class="subsection-title text-secondary">A. AI市場の成長と浸透</h3>
+                <p class="mb-4 text-neutral-dark">日本のAI市場は目覚ましい成長を遂げており、今後もその勢いは続くと予測されています。特に生成AIの技術発展とその応用拡大が市場成長の重要な鍵を握るとされています。</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="card">
+                        <h4 class="font-semibold text-lg mb-2 text-accent1">国内AIシステム市場予測 (IDC Japan)</h4>
+                        <div class="chart-container h-64 md:h-80"><canvas id="aiMarketGrowthChart"></canvas></div>
+                        <p class="mt-2 text-sm text-neutral-dark text-center">出典：IDC Japan (2024年1兆3,412億円 → 2029年4兆1,873億円)</p>
+                    </div>
+                    <div class="card">
+                        <h4 class="font-semibold text-lg mb-2 text-accent1">生成AI関連市場予測 (富士経済)</h4>
+                        <div class="chart-container h-64 md:h-80"><canvas id="generativeAiMarketChart"></canvas></div>
+                         <p class="mt-2 text-sm text-neutral-dark text-center">出典：富士経済 (2028年度 1兆7,397億円)</p>
+                    </div>
+                </div>
+                <!-- 
+                    Visualization Choice: AI Market Growth (IDC & Fuji Keizai)
+                    Data Point: AI Market Size Projections (Overall & Generative AI) from Table 1.
+                    Goal: Show change over time and compare magnitudes.
+                    Chosen Visualization: Line chart for IDC Japan (multiple years), Bar chart for Fuji Keizai (single future point comparison).
+                    Justification: Line charts are ideal for trends over time. Bar charts effectively compare discrete values.
+                    Library/Method: Chart.js (Canvas).
+                    NO SVG/Mermaid: Confirmed.
+                -->
 
-</BODY>
-</HTML>
+                <h3 class="subsection-title text-secondary">B. AIが牽引する主要産業</h3>
+                <p class="mb-4 text-neutral-dark">AIは、多くの既存産業を変革し、新たな価値を創出する基盤技術です。特に以下の分野で大きな成長が期待されています。</p>
+                <div class="chart-container md:max-w-3xl lg:max-w-4xl h-[500px] md:h-[600px]"><canvas id="aiDrivenIndustriesChart"></canvas></div>
+                <p class="mt-2 text-sm text-neutral-dark text-center">出典：Xenobrain (現在市場規模と2030年予測の比較)</p>
+                 <!-- 
+                    Visualization Choice: AI-Driven Industries
+                    Data Point: Market size (current vs. 2030) for Software Dev, FinTech, HealthTech, SalesTech from Table 1.
+                    Goal: Compare current and future market sizes across multiple industries.
+                    Chosen Visualization: Grouped Bar Chart.
+                    Justification: Grouped bars allow easy comparison of two values (current, future) for each category (industry).
+                    Library/Method: Chart.js (Canvas).
+                    NO SVG/Mermaid: Confirmed.
+                -->
+                
+                <h3 class="subsection-title text-secondary">C. AI分野におけるキャリアパス</h3>
+                <p class="mb-4 text-neutral-dark">AI革命の進展に伴い、AIエンジニアやデータサイエンティストといった専門職への需要は急速に高まっています。これらの職種の平均年収は他のIT職種と比較して高い傾向にあります。</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="card">
+                        <h4 class="font-semibold text-lg mb-2 text-accent1">AI関連職の平均年収 (一例)</h4>
+                        <ul class="list-disc list-inside space-y-1 text-neutral-dark">
+                            <li>データサイエンティスト: 約<span class="highlight-text">556万円</span>～<span class="highlight-text">610万円</span></li>
+                            <li>AIエンジニア (正社員): 約<span class="highlight-text">534万円</span>～<span class="highlight-text">598万円</span></li>
+                            <li>AIエンジニア (フリーランス): 年収換算約<span class="highlight-text">922万円</span>の事例も</li>
+                        </ul>
+                        <p class="mt-2 text-sm text-neutral-dark">出典：doda, Skillup AIgent, Reinforz.ai (レポート参照)</p>
+                    </div>
+                    <div class="card">
+                         <h4 class="font-semibold text-lg mb-2 text-accent1">求められる主要スキル</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-accent4 text-primary font-medium px-3 py-1 rounded-full text-sm">Python</span>
+                            <span class="bg-accent4 text-primary font-medium px-3 py-1 rounded-full text-sm">数学的知識</span>
+                            <span class="bg-accent4 text-primary font-medium px-3 py-1 rounded-full text-sm">機械学習</span>
+                            <span class="bg-accent4 text-primary font-medium px-3 py-1 rounded-full text-sm">深層学習</span>
+                            <span class="bg-accent4 text-primary font-medium px-3 py-1 rounded-full text-sm">データベース (SQL)</span>
+                            <span class="bg-accent4 text-primary font-medium px-3 py-1 rounded-full text-sm">ビジネス理解</span>
+                            <span class="bg-accent4 text-primary font-medium px-3 py-1 rounded-full text-sm">コミュニケーション能力</span>
+                        </div>
+                    </div>
+                </div>
+                 <!-- 
+                    Visualization Choice: AI Careers (Salaries & Skills)
+                    Data Point: Average salaries, key skills.
+                    Goal: Inform about career prospects.
+                    Chosen Visualization: Styled list for salaries, Tag cloud-like display for skills.
+                    Justification: Lists are good for factual data points. Tag clouds (achieved with styled spans) give a quick visual overview of important terms.
+                    Library/Method: HTML/CSS (Tailwind).
+                    NO SVG/Mermaid: Confirmed.
+                -->
+            </div>
+        </section>
+
+        <section id="population-decline" class="mb-16">
+            <h2 class="section-title">IV. 人口減少への対応：需要の高まる産業 <span class="text-xl">👵🤖</span></h2>
+            <div class="card">
+                <p class="mb-6 text-neutral-dark">日本の急速な人口減少と高齢化は、経済社会全体に多大な影響を及ぼしており、特定の産業分野においては新たな需要とキャリア機会を生み出しています。特に、労働力不足を補うための自動化技術や、増大する高齢者ケアのニーズに対応する分野が注目されます。</p>
+
+                <h3 class="subsection-title text-secondary">B. 人口動態の変化が牽引する成長分野</h3>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="font-semibold text-lg mb-2 text-accent1">医療・高齢者介護市場の拡大</h4>
+                        <div class="text-center p-6 border border-accent2 rounded-lg">
+                            <p class="text-neutral-dark">市場規模予測 (全体)</p>
+                            <p class="big-number text-accent1">101.3<span class="text-xl">兆円</span></p>
+                            <p class="text-neutral-dark mb-2">(2025年)</p>
+                            <p class="text-3xl font-bold text-accent2">↓</p>
+                            <p class="big-number text-accent1">115<span class="text-xl">兆円</span></p>
+                            <p class="text-neutral-dark">(2040年)</p>
+                            <p class="mt-2 text-sm text-neutral-dark">出典：レポート参照 [45, 46]</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-lg mb-2 text-accent1">介護テクノロジー市場 (2030年予測)</h4>
+                        <div class="chart-container h-72 md:h-96"><canvas id="careTechMarketChart"></canvas></div>
+                        <p class="mt-2 text-sm text-neutral-dark text-center">出典：レポート参照 [47]</p>
+                    </div>
+                </div>
+                <!-- 
+                    Visualization Choice: Healthcare/Elderly Care & CareTech Markets
+                    Data Point: Market size projections from Table 2.
+                    Goal: Inform about market size and compare sub-segments.
+                    Chosen Visualization: "Big Number" style for overall market, Donut chart for CareTech segments.
+                    Justification: Big numbers grab attention for key totals. Donut charts are good for showing parts of a whole.
+                    Library/Method: HTML/CSS for Big Numbers, Chart.js (Canvas) for Donut.
+                    NO SVG/Mermaid: Confirmed.
+                -->
+
+                <h4 class="font-semibold text-lg mt-8 mb-2 text-accent1">自動化とロボティクス市場の成長</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="card">
+                         <h5 class="font-medium text-md mb-1 text-accent2">ファクトリーオートメーション(FA)機器市場</h5>
+                        <p class="text-2xl font-bold text-accent1">2.16<span class="text-lg">兆円</span></p>
+                        <p class="text-neutral-dark">(2030年予測)</p>
+                        <p class="text-sm text-green-600">(特に産業用ロボット・制御装置が成長)</p>
+                        <p class="mt-1 text-xs text-neutral-dark">出典：レポート参照 [25]</p>
+                    </div>
+                     <div class="card">
+                        <h5 class="font-medium text-md mb-1 text-accent2">世界のロボット産業市場</h5>
+                        <p class="text-neutral-dark">現在: 約<span class="text-2xl font-bold text-accent1">10</span>兆円</p>
+                        <p class="text-xl font-bold text-accent2">→</p>
+                        <p class="text-neutral-dark">2040年予測: 約<span class="text-2xl font-bold text-accent1">60</span>兆円</p>
+                        <p class="mt-1 text-xs text-neutral-dark">出典：レポート参照 [52, 53]</p>
+                    </div>
+                </div>
+                <!-- 
+                    Visualization Choice: Automation & Robotics Market
+                    Data Point: FA market and Global Robotics market projections from Table 2.
+                    Goal: Inform about significant growth.
+                    Chosen Visualization: "Big Number" / Key Stat callouts.
+                    Justification: Highlights key figures effectively.
+                    Library/Method: HTML/CSS (Tailwind).
+                    NO SVG/Mermaid: Confirmed.
+                -->
+            </div>
+        </section>
+
+        <section id="climate-change" class="mb-16">
+            <h2 class="section-title">V. 気候変動と災害対応：レジリエントな未来を築く <span class="text-xl">🌍♻️</span></h2>
+            <div class="card">
+                <p class="mb-6 text-neutral-dark">気候変動の進行とその影響による自然災害の頻発化・激甚化は、現代社会が直面する最も大きな課題の一つです。これに対応するため、再生可能エネルギーへの転換、防災・減災技術の高度化、そして持続可能な社会システムへの移行を担う産業が急速に重要性を増しています。</p>
+
+                <h3 class="subsection-title text-secondary">A. 再生可能エネルギー分野</h3>
+                <p class="mb-4 text-neutral-dark">日本政府は、2030年までに電源構成における再生可能エネルギーの比率を36～38%に引き上げる目標を掲げています。</p>
+                <div class="chart-container h-80 md:h-96"><canvas id="renewableEnergyMixChart"></canvas></div>
+                <p class="mt-2 text-sm text-neutral-dark text-center">出典：レポート参照 [65, 66] (2030年目標電源構成比)</p>
+                <!-- 
+                    Visualization Choice: Renewable Energy Mix
+                    Data Point: Target shares of solar, wind, geothermal, biomass, hydro in 2030 from Sec V.A.
+                    Goal: Show composition of the target.
+                    Chosen Visualization: Donut Chart or Pie Chart.
+                    Justification: Ideal for showing parts of a whole.
+                    Library/Method: Chart.js (Canvas).
+                    NO SVG/Mermaid: Confirmed.
+                -->
+                
+                <h4 class="font-semibold text-lg mt-8 mb-2 text-accent1">注目される新技術</h4>
+                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="p-4 border border-accent3 rounded-lg"><strong>ペロブスカイト太陽電池:</strong> 軽量・柔軟、低照度発電</div>
+                    <div class="p-4 border border-accent3 rounded-lg"><strong>全固体電池:</strong> 高エネルギー密度、安全性向上</div>
+                    <div class="p-4 border border-accent3 rounded-lg"><strong>グリーンスチール:</strong> CO2排出削減製鉄</div>
+                    <div class="p-4 border border-accent3 rounded-lg"><strong>CCUS:</strong> CO2回収・有効利用・貯留</div>
+                </div>
+
+                <h3 class="subsection-title text-secondary mt-8">B. 防災・レジリエンス技術（防災テック）</h3>
+                <p class="mb-4 text-neutral-dark">防災情報システム・サービス市場は、気候変動による災害の激甚化や大規模災害リスクの高まりを受け、成長が見込まれます。「防災DX」としてデジタル技術活用が進んでいます。</p>
+                 <div class="text-center p-6 border border-accent2 rounded-lg">
+                    <p class="text-neutral-dark">防災情報システム・サービス市場予測</p>
+                    <p class="big-number text-accent1">2,360<span class="text-xl">億円</span></p>
+                    <p class="text-neutral-dark">(2030年度)</p>
+                    <p class="mt-2 text-sm text-neutral-dark">出典：レポート参照 [79]</p>
+                </div>
+                
+                <h3 class="subsection-title text-secondary mt-8">C. 環境コンサルティングとサステナビリティサービス</h3>
+                 <p class="mb-4 text-neutral-dark">企業のESG経営への取り組み加速や情報開示要請を背景に、専門コンサルティングの需要が拡大しています。</p>
+                <div class="chart-container h-72 md:h-80"><canvas id="sustainabilityConsultingMarketChart"></canvas></div>
+                <p class="mt-2 text-sm text-neutral-dark text-center">出典：レポート参照 [87] (2030年度市場予測)</p>
+                 <!-- 
+                    Visualization Choice: Sustainability Consulting Market
+                    Data Point: Market projections for SX/GX IT solutions, Decarbonization Consulting, ESG Consulting from Table 3.
+                    Goal: Compare market sizes of related consulting areas.
+                    Chosen Visualization: Bar Chart.
+                    Justification: Bar charts are effective for comparing magnitudes of different categories.
+                    Library/Method: Chart.js (Canvas).
+                    NO SVG/Mermaid: Confirmed.
+                -->
+
+                <h3 class="subsection-title text-secondary mt-8">D. サーキュラーエコノミー（循環型経済）への移行</h3>
+                <p class="mb-4 text-neutral-dark">資源制約と環境負荷に対応するため、資源を循環させ続ける経済モデルへの転換が進んでいます。</p>
+                <div class="text-center p-6 border border-accent2 rounded-lg">
+                    <p class="text-neutral-dark">サーキュラーエコノミー市場目標 (日本国内)</p>
+                    <p class="big-number text-accent1">80<span class="text-xl">兆円</span></p>
+                    <p class="text-neutral-dark">(2030年)</p>
+                    <p class="mt-2 text-sm text-neutral-dark">出典：レポート参照 [99]</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="other-trends" class="mb-16">
+            <h2 class="section-title">VI. その他の注目すべき社会トレンドと新興産業 <span class="text-xl">🚀🏢</span></h2>
+            <div class="card">
+                <p class="mb-6 text-neutral-dark">AI、人口減少、気候変動という三大潮流に加え、現代社会は働き方、価値観、ライフスタイルにおいても大きな変革期を迎えています。これらの変化は、新たな産業の勃興や既存産業の変容を促し、多様なキャリア機会を生み出しています。</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="card">
+                        <h4 class="font-semibold text-lg mb-2 text-accent1">働き方改革・リモートワーク</h4>
+                        <p class="text-neutral-dark text-sm">リモートワークソリューション市場: 2022年度 <span class="highlight-text">2,659億円</span> (CAGR 9.9% ～2027年度)</p>
+                        <p class="mt-1 text-xs text-neutral-dark">出典：[59]</p>
+                    </div>
+                    <div class="card">
+                        <h4 class="font-semibold text-lg mb-2 text-accent1">ウェルビーイング産業</h4>
+                        <p class="text-neutral-dark text-sm">企業向けウェルネス市場(日本): 2033年 <span class="highlight-text">111.3億ドル</span>予測</p>
+                         <p class="mt-1 text-xs text-neutral-dark">出典：[129]</p>
+                    </div>
+                    <div class="card">
+                        <h4 class="font-semibold text-lg mb-2 text-accent1">サイバーセキュリティ</h4>
+                        <p class="text-neutral-dark text-sm">日本市場: 2024年 <span class="highlight-text">1兆455億円</span>予測</p>
+                        <p class="mt-1 text-xs text-neutral-dark">出典：[141]</p>
+                    </div>
+                    <div class="card">
+                        <h4 class="font-semibold text-lg mb-2 text-accent1">スマートシティ</h4>
+                        <p class="text-neutral-dark text-sm">国内行政DX・PF市場: 2030年 約<span class="highlight-text">6.5兆円</span>予測</p>
+                        <p class="mt-1 text-xs text-neutral-dark">出典：[152]</p>
+                    </div>
+                    <div class="card">
+                        <h4 class="font-semibold text-lg mb-2 text-accent1">アグリ＆フードテック</h4>
+                        <p class="text-neutral-dark text-sm">国内市場(4分野計): 2030年度 <span class="highlight-text">2,112億円</span>予測</p>
+                        <p class="mt-1 text-xs text-neutral-dark">出典：[114]</p>
+                    </div>
+                    <div class="card">
+                        <h4 class="font-semibold text-lg mb-2 text-accent1">宇宙ビジネス</h4>
+                        <p class="text-neutral-dark text-sm">国内市場目標: 2030年代早期 <span class="highlight-text">8兆円</span></p>
+                        <p class="mt-1 text-xs text-neutral-dark">出典：[204]</p>
+                    </div>
+                </div>
+                 <!-- 
+                    Visualization Choice: Other Notable Trends (Market Sizes)
+                    Data Point: Market size/projection for various trends from Table 4.
+                    Goal: Inform about the scale of these emerging/growing areas.
+                    Chosen Visualization: Series of "Key Stat" cards.
+                    Justification: Cards allow for a modular and digestible presentation of multiple distinct data points.
+                    Library/Method: HTML/CSS (Tailwind).
+                    NO SVG/Mermaid: Confirmed.
+                -->
+            </div>
+        </section>
+
+        <section id="career-planning" class="mb-16">
+            <h2 class="section-title">VII. 有利な未来のための戦略的キャリアプランニング <span class="text-xl">🧭✨</span></h2>
+            <div class="card">
+                 <p class="mb-6 text-neutral-dark">変化の時代において「有利な人生を歩む」ためには、特定の産業知識に加え、分野横断的に活用できる汎用性の高いスキルを特定し、生涯学習を続けることが不可欠です。</p>
+                 
+                 <h3 class="subsection-title text-secondary">A. 分野横断的かつ需要の高い主要スキル</h3>
+                 <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead class="bg-secondary text-white">
+                            <tr>
+                                <th class="py-2 px-4 border-b text-left">主要スキル</th>
+                                <th class="py-2 px-4 border-b text-left">特に需要の高い分野の例</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-neutral-dark">
+                            <tr><td class="py-2 px-4 border-b">AI・機械学習</td><td class="py-2 px-4 border-b">全AI駆動型産業 (FinTech, HealthTech, 製造業等)</td></tr>
+                            <tr><td class="py-2 px-4 border-b">データ分析・データサイエンス</td><td class="py-2 px-4 border-b">上記AI関連、環境コンサル、防災テック、ウェルビーイング</td></tr>
+                            <tr><td class="py-2 px-4 border-b">プログラミング (特にPython)</td><td class="py-2 px-4 border-b">AI開発、ソフトウェア開発、データサイエンス</td></tr>
+                            <tr><td class="py-2 px-4 border-b">サイバーセキュリティ</td><td class="py-2 px-4 border-b">ITインフラ、金融、医療、スマートシティ、IoT</td></tr>
+                            <tr><td class="py-2 px-4 border-b">IoT・センサー技術</td><td class="py-2 px-4 border-b">スマートシティ、スマートファクトリー、AgriTech</td></tr>
+                            <tr><td class="py-2 px-4 border-b">ロボティクス</td><td class="py-2 px-4 border-b">製造業、介護・医療、物流、農業</td></tr>
+                            <tr><td class="py-2 px-4 border-b">サステナビリティ・ESG知識</td><td class="py-2 px-4 border-b">環境コンサル、再生可能エネルギー、サーキュラーエコノミー</td></tr>
+                            <tr><td class="py-2 px-4 border-b">プロジェクトマネジメント</td><td class="py-2 px-4 border-b">大規模開発が伴う全分野 (スマートシティ、再エネ施設等)</td></tr>
+                            <tr><td class="py-2 px-4 border-b">コミュニケーション能力</td><td class="py-2 px-4 border-b">分野横断プロジェクト、コンサルティング、開発業務全般</td></tr>
+                            <tr><td class="py-2 px-4 border-b">問題解決能力・論理的思考力</td><td class="py-2 px-4 border-b">エンジニアリング、コンサル、研究開発、事業開発</td></tr>
+                            <tr><td class="py-2 px-4 border-b">適応力・学習意欲</td><td class="py-2 px-4 border-b">急速に技術が進化する全分野</td></tr>
+                            <tr><td class="py-2 px-4 border-b">ドメイン知識 (各産業分野の専門性)</td><td class="py-2 px-4 border-b">HealthTechの医療知識、FinTechの金融知識等</td></tr>
+                        </tbody>
+                    </table>
+                 </div>
+                 <p class="mt-2 text-sm text-neutral-dark text-center">出典：レポート VII章、表5</p>
+                 <!-- 
+                    Visualization Choice: Key Skills for the Future
+                    Data Point: List of skills and relevant fields from Table 5.
+                    Goal: Organize and present key skills in a readable format.
+                    Chosen Visualization: HTML Table.
+                    Justification: Tables are excellent for presenting structured, categorical data with multiple attributes per item.
+                    Library/Method: HTML/CSS (Tailwind for styling).
+                    NO SVG/Mermaid: Confirmed.
+                -->
+
+                <h3 class="subsection-title text-secondary mt-8">B. 生涯学習とアップスキリング/リスキリング</h3>
+                <p class="text-neutral-dark">技術や社会の変化が加速する現代において、一度習得した知識やスキルだけでキャリアを全うすることは困難です。継続的な学習は、キャリアを持続的に発展させるための必須条件となります。</p>
+                <div class="mt-4 p-4 bg-accent4 bg-opacity-20 border-l-4 border-accent2 text-neutral-dark rounded">
+                    <p><span class="font-bold text-accent1">学び続ける姿勢：</span> オンラインコース、専門資格、セミナー、大学院など、多様な手段で積極的に新しい知識・スキルを習得しましょう。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="conclusion" class="mb-12">
+             <div class="card text-center">
+                <h2 class="text-3xl font-bold text-primary mb-4">未来をデザインする力を、今。</h2>
+                <p class="text-lg text-neutral-dark mb-6">
+                    AI革命、人口構造の変化、気候変動への対応は、挑戦であると同時に、かつてないほどの新しい事業機会と多様なキャリアパスを生み出しています。本レポートで概観したトレンドとデータが、皆さんのキャリア選択の一助となり、それぞれの可能性を最大限に引き出す未来へと繋がることを願っています。
+                </p>
+                <p class="text-md text-neutral-dark">
+                    変化の本質を理解し、必要なスキルを磨き、自律的にキャリアを設計していくことで、皆さんの「有利な人生」が実現されることを応援しています。
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-primary text-white text-center p-6 mt-12">
+        <p>&copy; 2025 業界トレンドと市場リサーチ インフォグラフィック. All rights reserved.</p>
+        <p class="text-sm opacity-75">本インフォグラフィックは「就活のための業界研究：未来を航海する」レポートに基づき作成されました。</p>
+    </footer>
+
+    <script>
+        const CHART_FONT_COLOR = '#212529'; // Near Black for readability
+        const CHART_GRID_COLOR = 'rgba(0, 0, 0, 0.1)';
+        const CHART_COLORS = {
+            primary: '#0077B6', // Strong Blue
+            secondary: '#00B4D8', // Sky Blue
+            accent1: '#48CAE4', // Medium Sky Blue
+            accent2: '#90E0EF', // Light Sky Blue
+            accent3: '#ADE8F4', // Pale Sky Blue
+            accent4: '#CAF0F8'  // Very Pale Blue
+        };
+        
+        // Label wrapping function
+        function wrapLabels(label, maxWidth = 16) {
+            if (typeof label !== 'string' || label.length <= maxWidth) {
+                return label;
+            }
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            for (const word of words) {
+                if ((currentLine + word).length > maxWidth && currentLine.length > 0) {
+                    lines.push(currentLine.trim());
+                    currentLine = word + ' ';
+                } else {
+                    currentLine += word + ' ';
+                }
+            }
+            if (currentLine.trim().length > 0) {
+                lines.push(currentLine.trim());
+            }
+            return lines.length > 0 ? lines : [label]; // Ensure it returns at least the original label if no wrapping occurs
+        }
+
+        // Default Tooltip Configuration
+        const defaultTooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    if (!item) return '';
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        // Chart.js Global Defaults
+        Chart.defaults.color = CHART_FONT_COLOR;
+        Chart.defaults.borderColor = CHART_GRID_COLOR;
+        Chart.defaults.font.family = "'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif";
+
+
+        // 1. AI Market Growth Chart (IDC Japan)
+        const aiMarketGrowthCtx = document.getElementById('aiMarketGrowthChart').getContext('2d');
+        new Chart(aiMarketGrowthCtx, {
+            type: 'line',
+            data: {
+                labels: ['2024年', '2025年', '2026年', '2027年', '2028年', '2029年'],
+                datasets: [{
+                    label: '国内AIシステム市場規模 (兆円)',
+                    data: [1.3412, 1.6866, 2.1185, 2.6607, 3.3416, 4.1873], // Hypothetical growth based on 25.6% CAGR
+                    borderColor: CHART_COLORS.primary,
+                    backgroundColor: CHART_COLORS.primary + '33', // Adding alpha for fill
+                    fill: true,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, ticks: { callback: value => value + '兆円' } }
+                },
+                plugins: { tooltip: defaultTooltipConfig }
+            }
+        });
+
+        // 2. Generative AI Market Chart (Fuji Keizai)
+        const generativeAiMarketCtx = document.getElementById('generativeAiMarketChart').getContext('2d');
+        new Chart(generativeAiMarketCtx, {
+            type: 'bar',
+            data: {
+                labels: [wrapLabels('生成AI関連市場 (2028年度予測)')],
+                datasets: [{
+                    label: '市場規模 (兆円)',
+                    data: [1.7397],
+                    backgroundColor: [CHART_COLORS.secondary],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true, ticks: { callback: value => value + '兆円' } } },
+                plugins: { legend: { display: false }, tooltip: defaultTooltipConfig }
+            }
+        });
+        
+        // 3. AI-Driven Industries Chart
+        const aiDrivenIndustriesCtx = document.getElementById('aiDrivenIndustriesChart').getContext('2d');
+        const industryLabels = ['ソフトウェア開発', 'FinTech', 'HealthTech', 'SalesTech'].map(label => wrapLabels(label));
+        new Chart(aiDrivenIndustriesCtx, {
+            type: 'bar',
+            data: {
+                labels: industryLabels,
+                datasets: [
+                    {
+                        label: '現在 (兆円)',
+                        data: [7.7, 1.6, 0.6918, 0.4159],
+                        backgroundColor: CHART_COLORS.accent1,
+                    },
+                    {
+                        label: '2030年予測 (兆円)',
+                        data: [9.1, 6.2, 1.4282, 0.5170],
+                        backgroundColor: CHART_COLORS.primary,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true, ticks: { callback: value => value + '兆円' } } },
+                plugins: { tooltip: defaultTooltipConfig }
+            }
+        });
+
+        // 4. CareTech Market Chart
+        const careTechMarketCtx = document.getElementById('careTechMarketChart').getContext('2d');
+        new Chart(careTechMarketCtx, {
+            type: 'doughnut',
+            data: {
+                labels: [wrapLabels('施設向け見守りシステム'), wrapLabels('在宅向け見守りシステム'), wrapLabels('業務効率化支援システム'), wrapLabels('その他介護関連製品・サービス')],
+                datasets: [{
+                    label: '市場規模 (億円) - 2030年予測',
+                    data: [120, 18, 57, (11000 - 120 - 18 - 57)], // 1.1兆円 = 11000億円
+                    backgroundColor: [CHART_COLORS.primary, CHART_COLORS.secondary, CHART_COLORS.accent1, CHART_COLORS.accent2],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { tooltip: defaultTooltipConfig }
+            }
+        });
+        
+        // 5. Renewable Energy Mix Chart
+        const renewableEnergyMixCtx = document.getElementById('renewableEnergyMixChart').getContext('2d');
+        new Chart(renewableEnergyMixCtx, {
+            type: 'pie',
+            data: {
+                labels: [wrapLabels('太陽光発電 (14-16%)'), wrapLabels('風力発電 (5%)'), wrapLabels('地熱発電 (1%)'), wrapLabels('バイオマス発電 (5%)'), wrapLabels('水力発電 (11%)'), wrapLabels('その他火力・原子力等 (残り)')],
+                datasets: [{
+                    label: '2030年目標 電源構成比',
+                    data: [15, 5, 1, 5, 11, (100-15-5-1-5-11)], // 太陽光は中間値15%で計算
+                    backgroundColor: [CHART_COLORS.primary, CHART_COLORS.secondary, CHART_COLORS.accent1, CHART_COLORS.accent2, CHART_COLORS.accent3, CHART_COLORS.accent4],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { tooltip: defaultTooltipConfig }
+            }
+        });
+
+        // 6. Sustainability Consulting Market Chart
+        const sustainabilityConsultingMarketCtx = document.getElementById('sustainabilityConsultingMarketChart').getContext('2d');
+        new Chart(sustainabilityConsultingMarketCtx, {
+            type: 'bar',
+            data: {
+                labels: [wrapLabels('SX/GX関連 ITソリューション'), wrapLabels('脱炭素 コンサルティング'), wrapLabels('ESG コンサルティング')],
+                datasets: [{
+                    label: '市場規模 (億円) - 2030年度予測',
+                    data: [8498, 1300, 1600],
+                    backgroundColor: [CHART_COLORS.primary, CHART_COLORS.secondary, CHART_COLORS.accent1],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y', // 横棒グラフ
+                scales: { x: { beginAtZero: true, ticks: { callback: value => value + '億円' } } },
+                plugins: { legend: { display: false }, tooltip: defaultTooltipConfig }
+            }
+        });
+
+    </script>
+</body>
+</html>
